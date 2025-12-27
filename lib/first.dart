@@ -155,7 +155,7 @@ class HomePage extends StatelessWidget {
                 },
               ),
 
-              // 💡 TRICKS & TIPS
+              
               _featureTile(
                 image: 'assets/images/triks.jpg',
                 title: 'Tricks and Tips',
@@ -175,7 +175,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // 🔹 WHITE CARD WIDGET
+  
   Widget _whiteCard({required Widget child}) {
     return Container(
       width: double.infinity,
@@ -188,7 +188,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // 🔹 FEATURE TILE WIDGET
+  
   Widget _featureTile({
     required String image,
     required String title,
