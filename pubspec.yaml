@@ -30,12 +30,12 @@ dependencies:
   intl: ^0.18.1 
        
   shared_preferences: ^2.0.15    
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_native_splash: ^2.4.0
 
 
 
@@ -58,6 +58,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -77,10 +78,31 @@ flutter:
   
 
 flutter_native_splash:
-  color: "#FFFFFF"
-  image: assets/images/logo.jpg
-  android: true
+  color: "#ffffff"
+  image: assets/splash.jpeg
+  fullscreen: true
+  android_12:
+    color: "#ffffff"
+    image: assets/splash.jpeg
+    icon_background_color: "#111111"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
   ios: true
+  image_path: "assets/icon.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/icon.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+  windows:
+    generate: true
+    image_path: "assets/icon.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/icon.png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
