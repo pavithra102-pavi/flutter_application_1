@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
 class Vegetable {
   final String name;
   final String imgUrl;
@@ -24,22 +20,14 @@ class Vegetable {
   });
 }
 
-class MyApp extends StatelessWidget {
+class TricksScreen extends StatefulWidget {
+  const TricksScreen({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: VegetableListPage(),
-    );
-  }
+  _TricksScreenState createState() => _TricksScreenState();
 }
 
-class VegetableListPage extends StatefulWidget {
-  @override
-  _VegetableListPageState createState() => _VegetableListPageState();
-}
-
-class _VegetableListPageState extends State<VegetableListPage> {
+class _TricksScreenState extends State<TricksScreen> {
   List<Vegetable> allVegetables = [
     Vegetable(
       name: "Tomato",
@@ -745,25 +733,18 @@ class _VegetableListPageState extends State<VegetableListPage> {
     });
   }
 
-  void _openMedicinalPage(Vegetable veg) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => MedicinalDetailPage(vegetable: veg)),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Tricks and Tips")),
+      appBar: AppBar(title: const Text('Tricks and Tips')),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
             child: TextField(
               decoration: InputDecoration(
-                labelText: "Search here",
-                prefixIcon: Icon(Icons.search),
+                hintText: "Search vegetables...",
+                prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
               onChanged: _filterVegetables,
@@ -771,21 +752,30 @@ class _VegetableListPageState extends State<VegetableListPage> {
           ),
           Expanded(
             child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: filteredVegetables.length,
               itemBuilder: (context, index) {
                 final veg = filteredVegetables[index];
-                return ListTile(
-                  leading: ClipOval(
-                    child: Image.asset(
-                      veg.imgUrl,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage(veg.imgUrl),
+                      onBackgroundImageError: (_, __) =>
+                          const Icon(Icons.image_not_supported),
                     ),
+                    title: Text(
+                      veg.name,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      veg.medicinal.length > 50
+                          ? '${veg.medicinal.substring(0, 50)}...'
+                          : veg.medicinal,
+                    ),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: () => _openDetailPage(veg),
                   ),
-
-                  title: Text(veg.name),
-                  onTap: () => _openMedicinalPage(veg),
                 );
               },
             ),
@@ -794,76 +784,89 @@ class _VegetableListPageState extends State<VegetableListPage> {
       ),
     );
   }
+
+  void _openDetailPage(Vegetable veg) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => VegetableDetailPage(vegetable: veg)),
+    );
+  }
 }
 
-class MedicinalDetailPage extends StatelessWidget {
+class VegetableDetailPage extends StatelessWidget {
   final Vegetable vegetable;
 
-  const MedicinalDetailPage({required this.vegetable});
+  const VegetableDetailPage({super.key, required this.vegetable});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(vegetable.name)),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🌸 Main Image
-            ClipOval(
-              child: Image.asset(
-                vegetable.imgUrl,
-                height: 250,
-                width: 250,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    const Icon(Icons.broken_image),
+            Center(
+              child: CircleAvatar(
+                radius: 80,
+                backgroundImage: AssetImage(vegetable.imgUrl),
+                onBackgroundImageError: (_, __) =>
+                    const Icon(Icons.image_not_supported, size: 50),
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            const Text(
+              "Health Benefits:",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              vegetable.medicinal,
+              style: const TextStyle(fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 24),
+
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: DecorationImage(
+                  image: AssetImage(vegetable.image),
+                  fit: BoxFit.cover,
+                  onError: (_, __) {},
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.black.withOpacity(0.3),
+                ),
+                child: Center(
+                  child: Text(
+                    vegetable.text,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 16),
 
-            // 🩺 Medicinal Use
             Text(
-              "Medicinal / Health Benefits:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              vegetable.title,
+              style: const TextStyle(fontSize: 16, height: 1.5),
             ),
-            SizedBox(height: 8),
-            Text(vegetable.medicinal, style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
-
-            // 📷 First Image
-            Image.asset(
-              vegetable.image,
-              height: 250,
-              width: 400,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  Icon(Icons.broken_image),
-            ),
-            SizedBox(height: 16),
-
-            // 🧴 Skin Care Title (text field)
-            Text(
-              vegetable.text,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-
-            // 🧴 Skin Care Description (title field)
-            Text(vegetable.title, style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
-
-            // 📷 Second Image (only if exists)
-            if (vegetable.extraimage.isNotEmpty)
-              Image.asset(
-                vegetable.extraimage,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    Icon(Icons.broken_image),
-              ),
           ],
         ),
       ),

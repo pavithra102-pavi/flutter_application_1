@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/first.dart'; // Or your home page after signup
+import 'package:flutter_application_1/components/components.dart';
+import 'package:flutter_application_1/screens/home_screen.dart';
 
-class AndroidCompact20 extends StatefulWidget {
-  const AndroidCompact20({Key? key}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  AndroidCompactSignUpState createState() => AndroidCompactSignUpState();
+  SignupScreenState createState() => SignupScreenState();
 }
 
-class AndroidCompactSignUpState extends State<AndroidCompact20> {
+class SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -36,22 +37,15 @@ class AndroidCompactSignUpState extends State<AndroidCompact20> {
               Text(
                 "Create Account",
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 40),
-
               Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Full Name *",
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                    ),
-                    const SizedBox(height: 8),
                     TextFormField(
                       controller: _nameController,
                       decoration: const InputDecoration(
@@ -66,12 +60,6 @@ class AndroidCompactSignUpState extends State<AndroidCompact20> {
                       },
                     ),
                     const SizedBox(height: 24),
-
-                    const Text(
-                      "Email Address *",
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                    ),
-                    const SizedBox(height: 8),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -90,12 +78,6 @@ class AndroidCompactSignUpState extends State<AndroidCompact20> {
                       },
                     ),
                     const SizedBox(height: 24),
-
-                    const Text(
-                      "Password *",
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                    ),
-                    const SizedBox(height: 8),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
@@ -114,12 +96,6 @@ class AndroidCompactSignUpState extends State<AndroidCompact20> {
                       },
                     ),
                     const SizedBox(height: 24),
-
-                    const Text(
-                      "Confirm Password *",
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                    ),
-                    const SizedBox(height: 8),
                     TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: true,
@@ -137,36 +113,24 @@ class AndroidCompactSignUpState extends State<AndroidCompact20> {
                         return null;
                       },
                     ),
-
                     const SizedBox(height: 40),
-
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            // TODO: Implement signup logic or navigate
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomePage(), // Home page or dashboard
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text(
-                          "Sign Up",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
+                    AuthButton(
+                      text: "Sign Up",
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 30),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -176,7 +140,7 @@ class AndroidCompactSignUpState extends State<AndroidCompact20> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context); // Go back to login page
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       "Log in",
