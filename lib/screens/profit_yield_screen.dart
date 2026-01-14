@@ -1,32 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/first.dart';
 
-void main() {
-  runApp(const ProfitEstimatorApp());
-}
-
-class ProfitEstimatorApp extends StatelessWidget {
-  const ProfitEstimatorApp({super.key});
+class ProfitYieldScreen extends StatefulWidget {
+  const ProfitYieldScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Profit Yield Estimator',
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: const ProfitEstimatorPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  State<ProfitYieldScreen> createState() => _ProfitYieldScreenState();
 }
 
-class ProfitEstimatorPage extends StatefulWidget {
-  const ProfitEstimatorPage({super.key});
-
-  @override
-  State<ProfitEstimatorPage> createState() => _ProfitEstimatorPageState();
-}
-
-class _ProfitEstimatorPageState extends State<ProfitEstimatorPage> {
+class _ProfitYieldScreenState extends State<ProfitYieldScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // Input controllers
@@ -56,11 +37,9 @@ class _ProfitEstimatorPageState extends State<ProfitEstimatorPage> {
     double machine =
         (double.tryParse(machineCostController.text) ?? 0) * landInSents;
 
-    totalYieldKg =
-        (double.tryParse(yieldController.text) ?? 0) * landInSents;
+    totalYieldKg = (double.tryParse(yieldController.text) ?? 0) * landInSents;
 
-    double marketPrice =
-        double.tryParse(marketPriceController.text) ?? 0;
+    double marketPrice = double.tryParse(marketPriceController.text) ?? 0;
 
     totalCost = seed + fert + labor + machine;
     totalIncome = totalYieldKg * marketPrice;
@@ -73,19 +52,12 @@ class _ProfitEstimatorPageState extends State<ProfitEstimatorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("🌾 Profit Yield Estimator"),
+        title: const Text("Profit Yield Estimator"),
         centerTitle: true,
-
-        /// ✅ BACK ALWAYS GOES TO FIRST PAGE
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const MyApp(),
-              ),
-            );
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -114,22 +86,36 @@ class _ProfitEstimatorPageState extends State<ProfitEstimatorPage> {
               ),
 
               buildTextField("Soil Type (optional)", soilTypeController),
-              buildTextField("Seed Cost per sent (₹)", seedCostController,
-                  isNumber: true),
               buildTextField(
-                  "Fertilizer & Pesticide Cost per sent (₹)",
-                  fertCostController,
-                  isNumber: true),
-              buildTextField("Labor Cost per sent (₹)", laborCostController,
-                  isNumber: true),
-              buildTextField("Machine Rental per sent (₹)",
-                  machineCostController,
-                  isNumber: true),
-              buildTextField("Expected Yield per sent (kg)", yieldController,
-                  isNumber: true),
-              buildTextField("Market Price per kg (₹)",
-                  marketPriceController,
-                  isNumber: true),
+                "Seed Cost per sent (₹)",
+                seedCostController,
+                isNumber: true,
+              ),
+              buildTextField(
+                "Fertilizer & Pesticide Cost per sent (₹)",
+                fertCostController,
+                isNumber: true,
+              ),
+              buildTextField(
+                "Labor Cost per sent (₹)",
+                laborCostController,
+                isNumber: true,
+              ),
+              buildTextField(
+                "Machine Rental per sent (₹)",
+                machineCostController,
+                isNumber: true,
+              ),
+              buildTextField(
+                "Expected Yield per sent (kg)",
+                yieldController,
+                isNumber: true,
+              ),
+              buildTextField(
+                "Market Price per kg (₹)",
+                marketPriceController,
+                isNumber: true,
+              ),
 
               const SizedBox(height: 20),
               Center(
@@ -146,14 +132,16 @@ class _ProfitEstimatorPageState extends State<ProfitEstimatorPage> {
               ),
               const SizedBox(height: 10),
 
+              resultRow("Total Yield", "${totalYieldKg.toStringAsFixed(2)} kg"),
               resultRow(
-                  "Total Yield", "${totalYieldKg.toStringAsFixed(2)} kg"),
-              resultRow("Income from Yield",
-                  "₹${totalIncome.toStringAsFixed(2)}"),
+                "Income from Yield",
+                "₹${totalIncome.toStringAsFixed(2)}",
+              ),
+              resultRow("Total Cost", "₹${totalCost.toStringAsFixed(2)}"),
               resultRow(
-                  "Total Cost", "₹${totalCost.toStringAsFixed(2)}"),
-              resultRow("Estimated Profit",
-                  "₹${estimatedProfit.toStringAsFixed(2)}"),
+                "Estimated Profit",
+                "₹${estimatedProfit.toStringAsFixed(2)}",
+              ),
 
               const SizedBox(height: 10),
               if (estimatedProfit > 0)
@@ -190,10 +178,9 @@ class _ProfitEstimatorPageState extends State<ProfitEstimatorPage> {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: TextFormField(
+      child: TextField(
         controller: controller,
-        keyboardType:
-            isNumber ? TextInputType.number : TextInputType.text,
+        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
         decoration: InputDecoration(
           labelText: label,
           border: const OutlineInputBorder(),
@@ -208,10 +195,8 @@ class _ProfitEstimatorPageState extends State<ProfitEstimatorPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label,
-              style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(value,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );

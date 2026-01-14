@@ -25,12 +25,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-  table_calendar: ^3.0.9   
+  table_calendar: ^3.0.9
 
-  intl: ^0.18.1 
-       
-  shared_preferences: ^2.0.15    
+  intl: ^0.18.1
+
+  shared_preferences: ^2.0.15
   flutter_native_splash: ^2.4.7
+  camera: ^0.10.5+9
+  image_picker: ^1.1.2
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
