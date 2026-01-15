@@ -68,6 +68,7 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
         'irrigation': [5, 10, 15, 20, 25, 30, 35, 40],
         'cultivation': [15, 30],
       },
+      'Orange': {'fertilizer': [], 'irrigation': [], 'cultivation': []},
     };
 
     final schedule = cropSchedules[cropName] ?? cropSchedules['default']!;
@@ -153,35 +154,15 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.cropName} Calendar'),
-        backgroundColor: Colors.green,
-      ),
+      appBar: AppBar(title: Text('${widget.cropName} Calendar')),
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.green.shade50,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.cropName,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Started on ${DateFormat('MMM dd, yyyy').format(_startDate)}',
-                    style: const TextStyle(fontSize: 16, color: Colors.black54),
-                  ),
-                ],
-              ),
+            Text(
+              'Started on ${DateFormat('MMM dd, yyyy').format(_startDate)}',
+              style: Theme.of(context).textTheme.labelMedium,
             ),
+            SizedBox(height: 32),
 
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
