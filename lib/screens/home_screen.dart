@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/components.dart';
 import 'package:flutter_application_1/screens/chatbot_screen.dart';
-import 'package:flutter_application_1/screens/crop_calendar_screen.dart';
+import 'package:flutter_application_1/screens/crop_category_screen.dart';
 import 'package:flutter_application_1/screens/plant_disease_detection_screen.dart';
 import 'package:flutter_application_1/screens/profit_yield_screen.dart';
 import 'package:flutter_application_1/screens/tricks_screen.dart';
@@ -62,7 +62,10 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       const Icon(Icons.arrow_forward, size: 32),
-                      Image.asset('assets/images/medicinebottle.jpg', width: 100),
+                      Image.asset(
+                        'assets/images/medicinebottle.jpg',
+                        width: 100,
+                      ),
                     ],
                   ),
                 ),
@@ -84,9 +87,7 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const CropCalendarScreen(),
-                    ),
+                    MaterialPageRoute(builder: (_) => const CropCategoryList()),
                   );
                 },
               ),
