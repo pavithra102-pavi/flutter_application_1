@@ -18,7 +18,7 @@ class CropCategoryList extends StatelessWidget {
       {'image': 'assets/images/bitterguard.jpg', 'title': 'Bitter Gourd'},
       {'image': 'assets/images/brinjal.jpg', 'title': 'Brinjal'},
       {'image': 'assets/images/beans.jpg', 'title': 'Beans'},
-      {'image': 'assets/images/ladysfinger.jpg', 'title': 'Lady\'s Finger'},
+      {'image': 'assets/images/ladysfinger.jpg', 'title': 'Ladys Finger'},
       {'image': 'assets/images/greenchilli.jpg', 'title': 'Green Chilli'},
       {'image': 'assets/images/bottleguard.jpg', 'title': 'Bottle Gourd'},
       {'image': 'assets/images/cabbage.jpg', 'title': 'Cabbage'},

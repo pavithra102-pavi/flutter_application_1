@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/components/components.dart';
+import 'package:flutter_application_1/components/white_card.dart';
 import 'package:flutter_application_1/screens/chatbot_screen.dart';
 import 'package:flutter_application_1/screens/crop_category_screen.dart';
 import 'package:flutter_application_1/screens/plant_disease_detection_screen.dart';
@@ -13,14 +13,20 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(
+        255,
+        157,
+        225,
+        151,
+      ), // 🌿 light green background
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+              /// 📅 DATE CARD
               WhiteCard(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Today, ${DateFormat('d MMM').format(DateTime.now())}",
@@ -37,7 +43,10 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 18),
+
+              const SizedBox(height: 20),
+
+              /// 📷 TAKE A PICTURE CARD
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -49,69 +58,100 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: WhiteCard(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Column(
                         children: [
-                          Image.asset('assets/images/camera.jpg', width: 100),
+                          Image.asset('assets/images/camera.jpg', width: 70),
                           const SizedBox(height: 10),
                           const Text(
                             "Take a picture",
-                            style: TextStyle(fontSize: 22),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
-                      const Icon(Icons.arrow_forward, size: 32),
+                      const Icon(Icons.arrow_forward, size: 30),
                       Image.asset(
                         'assets/images/medicinebottle.jpg',
-                        width: 100,
+                        width: 70,
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 18),
-              FeatureTile(
+
+              const SizedBox(height: 24),
+
+              /// 🤖 CROP ADVISOR CHATBOT
+              _featureWhiteCard(
                 image: 'assets/images/chatbot.jpg',
                 title: 'Crop Advisor Chatbot',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => ChatbotScreen()),
-                  );
-                },
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ChatbotScreen()),
+                ),
               ),
-              FeatureTile(
+
+              /// 🌱 CROP CALENDAR
+              _featureWhiteCard(
                 image: 'assets/images/cropcalendar.jpg',
                 title: 'Crop Calendar',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const CropCategoryList()),
-                  );
-                },
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CropCategoryList()),
+                ),
               ),
-              FeatureTile(
+
+              /// 📈 PROFIT YIELD ESTIMATOR
+              _featureWhiteCard(
                 image: 'assets/images/profityield.jpg',
                 title: 'Profit Yield Estimator',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const ProfitYieldScreen(),
-                    ),
-                  );
-                },
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfitYieldScreen()),
+                ),
               ),
-              FeatureTile(
+
+              /// 💡 TRICKS AND TIPS
+              _featureWhiteCard(
                 image: 'assets/images/triks.jpg',
                 title: 'Tricks and Tips',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const TricksScreen()),
-                  );
-                },
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const TricksScreen()),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// ✅ WHITE FEATURE CARD WITH SPACING
+  Widget _featureWhiteCard({
+    required String image,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14), // ✅ spacing between cards
+      child: GestureDetector(
+        onTap: onTap,
+        child: WhiteCard(
+          child: Row(
+            children: [
+              Image.asset(image, width: 42),
+              const SizedBox(width: 16),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),

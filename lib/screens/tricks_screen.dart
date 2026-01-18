@@ -807,9 +807,10 @@ class VegetableDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Main vegetable image
             Center(
               child: CircleAvatar(
-                radius: 80,
+                radius: 120,
                 backgroundImage: AssetImage(vegetable.imgUrl),
                 onBackgroundImageError: (_, __) =>
                     const Icon(Icons.image_not_supported, size: 50),
@@ -817,6 +818,7 @@ class VegetableDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
+            // Health Benefits Section
             const Text(
               "Health Benefits:",
               style: TextStyle(
@@ -828,45 +830,64 @@ class VegetableDetailPage extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               vegetable.medicinal,
-              style: const TextStyle(fontSize: 16, height: 1.5),
+              style: const TextStyle(fontSize: 18, height: 1.5),
             ),
             const SizedBox(height: 24),
 
+            // First image container
             Container(
-              height: 200,
+              height: 250,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
                   image: AssetImage(vegetable.image),
                   fit: BoxFit.cover,
                   onError: (_, __) {},
                 ),
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.black.withOpacity(0.3),
-                ),
-                child: Center(
-                  child: Text(
-                    vegetable.text,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+            ),
+            const SizedBox(height: 8),
+
+            // Text below first image
+            Text(
+              vegetable.text,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
 
+            // Additional details text
             Text(
               vegetable.title,
               style: const TextStyle(fontSize: 16, height: 1.5),
             ),
+            const SizedBox(height: 16),
+
+            // Second image container
+            Container(
+              height: 250,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: DecorationImage(
+                  image: AssetImage(vegetable.extraimage),
+                  fit: BoxFit.cover,
+                  onError: (_, __) {},
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // Optional text below second image (if needed)
+            // Text(
+            //   "Additional information here",
+            //   style: const TextStyle(fontSize: 16, height: 1.5),
+            // ),
           ],
         ),
       ),
