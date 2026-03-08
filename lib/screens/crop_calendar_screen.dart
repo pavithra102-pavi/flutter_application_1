@@ -47,6 +47,7 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
   Map<DateTime, List<CropEvent>> _generateDummyEvents(String cropName) {
     final Map<DateTime, List<CropEvent>> events = {};
 
+    // dart format off
     final cropSchedules = {
       'Rice': {
         'fertilizer': [0, 30,60,90],
@@ -368,58 +369,33 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
         'irrigation': [0, 4,8,12,16,20,24,28,32,36,40,44,48,52,56,60,64,71,78,85,92,99,106,113,120,127,134,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,302,309,316,323,330,337,344,351,358,365,372,379,386,393,400,407,414,421,428,435,442,449,456,463,470,477,484,491,498,505,512,519,526,533,540,547,554,561,568,575,582,589,596,603,610,617,624,631,638,645,652,659,666,673,680,687,694,701,708,715,722,729,736,743,750,757,764,771,778,785,792,799],
         'cultivation': [150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300],
       },
-      'Orange': {'fertilizer': [], 'irrigation': [], 'cultivation': []},
     };
+     // dart format on
 
-    final schedule = cropSchedules[cropName] ?? cropSchedules['default']!;
+    final schedule = cropSchedules[cropName] ?? cropSchedules['Rice']!;
 
-    for (final day in schedule['fertilizer']!) {
-      final eventDate = _startDate.add(Duration(days: day));
-      final event = CropEvent(
-        date: eventDate,
-        type: CropEventType.fertilizer,
-        description: 'Apply fertilizer to $cropName',
-      );
+    void addEvents(String key, CropEventType type, String desc) {
+      for (final day in schedule[key]!) {
+        final eventDate = _startDate.add(Duration(days: day));
+        final normalizedDate = DateTime(
+          eventDate.year,
+          eventDate.month,
+          eventDate.day,
+        );
 
-      final normalizedDate = DateTime(
-        eventDate.year,
-        eventDate.month,
-        eventDate.day,
-      );
-      events[normalizedDate] = [...(events[normalizedDate] ?? []), event];
+        final event = CropEvent(date: eventDate, type: type, description: desc);
+
+        events[normalizedDate] = [...(events[normalizedDate] ?? []), event];
+      }
     }
 
-    for (final day in schedule['irrigation']!) {
-      final eventDate = _startDate.add(Duration(days: day));
-      final event = CropEvent(
-        date: eventDate,
-        type: CropEventType.irrigation,
-        description: 'Irrigate $cropName',
-      );
-
-      final normalizedDate = DateTime(
-        eventDate.year,
-        eventDate.month,
-        eventDate.day,
-      );
-      events[normalizedDate] = [...(events[normalizedDate] ?? []), event];
-    }
-
-    for (final day in schedule['cultivation']!) {
-      final eventDate = _startDate.add(Duration(days: day));
-      final event = CropEvent(
-        date: eventDate,
-        type: CropEventType.cultivation,
-        description: 'Cultivate $cropName',
-      );
-
-      final normalizedDate = DateTime(
-        eventDate.year,
-        eventDate.month,
-        eventDate.day,
-      );
-      events[normalizedDate] = [...(events[normalizedDate] ?? []), event];
-    }
+    addEvents(
+      'fertilizer',
+      CropEventType.fertilizer,
+      'Apply fertilizer to $cropName',
+    );
+    addEvents('irrigation', CropEventType.irrigation, 'Irrigate $cropName');
+    addEvents('cultivation', CropEventType.cultivation, 'Cultivate $cropName');
 
     return events;
   }
@@ -637,6 +613,17 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
     );
   }
 
+  IconData _getEventIcon(CropEventType type) {
+    switch (type) {
+      case CropEventType.fertilizer:
+        return Icons.grass;
+      case CropEventType.irrigation:
+        return Icons.water_drop;
+      case CropEventType.cultivation:
+        return Icons.agriculture;
+    }
+  }
+
   Widget _buildLegendItem(Color color, String label) {
     return Row(
       children: [
@@ -649,16 +636,5 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
         Text(label, style: const TextStyle(fontSize: 12)),
       ],
     );
-  }
-
-  IconData _getEventIcon(CropEventType type) {
-    switch (type) {
-      case CropEventType.fertilizer:
-        return Icons.grass;
-      case CropEventType.irrigation:
-        return Icons.water_drop;
-      case CropEventType.cultivation:
-        return Icons.agriculture;
-    }
   }
 }
