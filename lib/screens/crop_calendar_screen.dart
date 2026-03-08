@@ -370,55 +370,33 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
       },
     };
 
-    final schedule = cropSchedules[cropName] ?? cropSchedules['default']!;
+    final schedule = cropSchedules[cropName] ?? cropSchedules['Rice']!;
 
-    for (final day in schedule['fertilizer']!) {
-      final eventDate = _startDate.add(Duration(days: day));
-      final event = CropEvent(
-        date: eventDate,
-        type: CropEventType.fertilizer,
-        description: 'Apply fertilizer to $cropName',
-      );
+    void addEvents(String key, CropEventType type, String desc) {
+      for (final day in schedule[key]!) {
+        final eventDate = _startDate.add(Duration(days: day));
+        final normalizedDate =
+            DateTime(eventDate.year, eventDate.month, eventDate.day);
 
-      final normalizedDate = DateTime(
-        eventDate.year,
-        eventDate.month,
-        eventDate.day,
-      );
-      events[normalizedDate] = [...(events[normalizedDate] ?? []), event];
+        final event = CropEvent(
+          date: eventDate,
+          type: type,
+          description: desc,
+        );
+
+        events[normalizedDate] = [
+          ...(events[normalizedDate] ?? []),
+          event
+        ];
+      }
     }
 
-    for (final day in schedule['irrigation']!) {
-      final eventDate = _startDate.add(Duration(days: day));
-      final event = CropEvent(
-        date: eventDate,
-        type: CropEventType.irrigation,
-        description: 'Irrigate $cropName',
-      );
-
-      final normalizedDate = DateTime(
-        eventDate.year,
-        eventDate.month,
-        eventDate.day,
-      );
-      events[normalizedDate] = [...(events[normalizedDate] ?? []), event];
-    }
-
-    for (final day in schedule['cultivation']!) {
-      final eventDate = _startDate.add(Duration(days: day));
-      final event = CropEvent(
-        date: eventDate,
-        type: CropEventType.cultivation,
-        description: 'Cultivate $cropName',
-      );
-
-      final normalizedDate = DateTime(
-        eventDate.year,
-        eventDate.month,
-        eventDate.day,
-      );
-      events[normalizedDate] = [...(events[normalizedDate] ?? []), event];
-    }
+    addEvents('fertilizer', CropEventType.fertilizer,
+        'Apply fertilizer to $cropName');
+    addEvents(
+        'irrigation', CropEventType.irrigation, 'Irrigate $cropName');
+    addEvents('cultivation', CropEventType.cultivation,
+        'Cultivate $cropName');
 
     return events;
   }
@@ -450,210 +428,15 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.cropName} Calendar'),
-        backgroundColor: Colors.green,
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.green.shade50,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.cropName,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Started on ${DateFormat('MMM dd, yyyy').format(_startDate)}',
-                    style: const TextStyle(fontSize: 16, color: Colors.black54),
-                  ),
-                ],
-              ),
-            ),
-
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildLegendItem(Colors.green, 'Fertilizer'),
-                  _buildLegendItem(Colors.blue, 'Irrigation'),
-                  _buildLegendItem(Colors.orange, 'Cultivation'),
-                ],
-              ),
-            ),
-
-            TableCalendar<CropEvent>(
-              firstDay: _startDate.subtract(const Duration(days: 30)),
-              lastDay: _startDate.add(const Duration(days: 5000)),
-              focusedDay: _focusedDay,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              calendarFormat: _calendarFormat,
-              eventLoader: _getEventsForDay,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              calendarStyle: CalendarStyle(
-                selectedDecoration: const BoxDecoration(
-                  color: Colors.green,
-                  shape: BoxShape.circle,
-                ),
-                todayDecoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.3),
-                  shape: BoxShape.circle,
-                ),
-                markerDecoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              headerStyle: const HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
-              ),
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              },
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
-              onPageChanged: (focusedDay) {
-                _focusedDay = focusedDay;
-              },
-              calendarBuilders: CalendarBuilders(
-                markerBuilder: (context, date, events) {
-                  if (events.isEmpty) return const SizedBox();
-
-                  return Positioned(
-                    bottom: 1,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: events.map((event) {
-                        return Container(
-                          width: 6,
-                          height: 6,
-                          margin: const EdgeInsets.symmetric(horizontal: 1),
-                          decoration: BoxDecoration(
-                            color: _getEventColor(event.type),
-                            shape: BoxShape.circle,
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            if (_selectedDay != null) ...[
-              Container(
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      DateFormat('EEEE, MMM dd').format(_selectedDay!),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    ..._getEventsForDay(_selectedDay!).map((event) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: _getEventColor(event.type).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: _getEventColor(event.type),
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              _getEventIcon(event.type),
-                              color: _getEventColor(event.type),
-                              size: 20,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _getEventTypeName(event.type),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: _getEventColor(event.type),
-                                    ),
-                                  ),
-                                  Text(
-                                    event.description,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                    if (_getEventsForDay(_selectedDay!).isEmpty)
-                      const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Text(
-                            'No activities scheduled for this day',
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
+  IconData _getEventIcon(CropEventType type) {
+    switch (type) {
+      case CropEventType.fertilizer:
+        return Icons.grass;
+      case CropEventType.irrigation:
+        return Icons.water_drop;
+      case CropEventType.cultivation:
+        return Icons.agriculture;
+    }
   }
 
   Widget _buildLegendItem(Color color, String label) {
@@ -670,14 +453,126 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
     );
   }
 
-  IconData _getEventIcon(CropEventType type) {
-    switch (type) {
-      case CropEventType.fertilizer:
-        return Icons.grass;
-      case CropEventType.irrigation:
-        return Icons.water_drop;
-      case CropEventType.cultivation:
-        return Icons.agriculture;
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${widget.cropName} Calendar'),
+        backgroundColor: Colors.green,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(   // ✅ FIXED OVERFLOW
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                color: Colors.green.shade50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.cropName,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Started on ${DateFormat('MMM dd, yyyy').format(_startDate)}',
+                      style: const TextStyle(fontSize: 16, color: Colors.black54),
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildLegendItem(Colors.green, 'Fertilizer'),
+                    _buildLegendItem(Colors.blue, 'Irrigation'),
+                    _buildLegendItem(Colors.orange, 'Cultivation'),
+                  ],
+                ),
+              ),
+
+              TableCalendar<CropEvent>(
+                firstDay: _startDate.subtract(const Duration(days: 30)),
+                lastDay: _startDate.add(const Duration(days: 5000)),
+                focusedDay: _focusedDay,
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                calendarFormat: _calendarFormat,
+                eventLoader: _getEventsForDay,
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                ),
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                },
+                calendarBuilders: CalendarBuilders(
+                  markerBuilder: (context, date, events) {
+                    if (events.isEmpty) return const SizedBox();
+                    return Positioned(
+                      bottom: 1,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: events.map((event) {
+                          return Container(
+                            width: 6,
+                            height: 6,
+                            margin: const EdgeInsets.symmetric(horizontal: 1),
+                            decoration: BoxDecoration(
+                              color: _getEventColor(event.type),
+                              shape: BoxShape.circle,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              if (_selectedDay != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: _getEventsForDay(_selectedDay!).map((event) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: _getEventColor(event.type).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: _getEventColor(event.type)),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(_getEventIcon(event.type),
+                                color: _getEventColor(event.type)),
+                            const SizedBox(width: 10),
+                            Expanded(child: Text(event.description)),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

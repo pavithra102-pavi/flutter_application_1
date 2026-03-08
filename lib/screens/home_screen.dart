@@ -5,7 +5,7 @@ import 'package:flutter_application_1/screens/crop_category_screen.dart';
 import 'package:flutter_application_1/screens/plant_disease_detection_screen.dart';
 import 'package:flutter_application_1/screens/profit_yield_screen.dart';
 import 'package:flutter_application_1/screens/tricks_screen.dart';
-import 'package:flutter_application_1/screens/schemes.dart'; // ✅ NEW IMPORT
+import 'package:flutter_application_1/screens/schemes.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,17 +14,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(
-        245,
-        166,
-        224,
-        139,
-      ), // 🌿 light green background
+      backgroundColor: const Color.fromARGB(245, 166, 224, 139),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+
               /// 📅 DATE CARD
               WhiteCard(
                 child: Column(
@@ -53,7 +49,8 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const PlantDiseaseDetectionScreen(),
+                      builder: (_) =>
+                          const PlantDiseaseDetectionScreen(),
                     ),
                   );
                 },
@@ -63,7 +60,10 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          Image.asset('assets/images/camera.jpg', width: 70),
+                          Image.asset(
+                            'assets/images/camera.jpg',
+                            width: 70,
+                          ),
                           const SizedBox(height: 10),
                           const Text(
                             "Take a picture",
@@ -90,51 +90,70 @@ class HomeScreen extends StatelessWidget {
               _featureWhiteCard(
                 image: 'assets/images/chatbot.jpg',
                 title: 'Crop Advisor Chatbot',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ChatbotScreen()),
-                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ChatbotScreen(),
+                    ),
+                  );
+                },
               ),
 
               /// 🌱 CROP CALENDAR
               _featureWhiteCard(
                 image: 'assets/images/cropcalendar.jpg',
                 title: 'Crop Calendar',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const CropCategoryList()),
-                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const CropCategoryList(),
+                    ),
+                  );
+                },
               ),
 
               /// 📈 PROFIT YIELD ESTIMATOR
               _featureWhiteCard(
                 image: 'assets/images/profityield.jpg',
                 title: 'Profit Yield Estimator',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProfitYieldScreen()),
-                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ProfitYieldScreen(),
+                    ),
+                  );
+                },
               ),
 
               /// 💡 TRICKS AND TIPS
               _featureWhiteCard(
                 image: 'assets/images/triks.jpg',
                 title: 'Tricks and Tips',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const TricksScreen()),
-                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const TricksScreen(),
+                    ),
+                  );
+                },
               ),
 
-              /// 🏛️ SCHEMES FOR AGRICULTURE ✅ NEW FEATURE
+              /// 🏛️ SCHEMES FOR AGRICULTURE
               _featureWhiteCard(
-                image: 'assets/images/schemes.jpg', // ✅ add this image in assets
+                image: 'assets/images/schemes.jpg',
                 title: 'Schemes for Agriculture',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const GovtSchemesPage()
-                  ),
-                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const StatesPage(), // ✅ Correct
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -143,14 +162,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// ✅ WHITE FEATURE CARD WITH SPACING
+  /// 🔹 Reusable Feature Card
   Widget _featureWhiteCard({
     required String image,
     required String title,
     required VoidCallback onTap,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14), // ✅ spacing between cards
+      padding: const EdgeInsets.only(bottom: 14),
       child: GestureDetector(
         onTap: onTap,
         child: WhiteCard(
@@ -158,11 +177,13 @@ class HomeScreen extends StatelessWidget {
             children: [
               Image.asset(image, width: 42),
               const SizedBox(width: 16),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],
